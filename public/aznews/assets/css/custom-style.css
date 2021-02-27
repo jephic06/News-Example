@@ -8,9 +8,9 @@
 }
 
 .trending-area .trending-main .trand-right-single .trand-right-cap span {
-	padding:4px;
-	margin-bottom:0;
-	margin-right:10px;
+	padding: 4px;
+	margin-bottom: 0;
+	margin-right: 10px;
 	font-size: 14px;
 	border-radius: 5px
 }
@@ -25,7 +25,10 @@
 }
 
 .trand-middle-img {
-	display:flex;flex-direction:row;justify-content:space-between
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding-bottom: 5px;
 }
 
 .trending-area .trending-main .trand-right-single .trand-right-img img {
