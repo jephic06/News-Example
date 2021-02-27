@@ -1,0 +1,23 @@
+.trending-area .trending-main .trand-right-single:last-child {
+	width: 100%
+}
+
+.trending-area .trending-main .trand-right-single .trand-right-cap {
+	width: 90%;
+	padding-left: 0
+}
+
+.trending-area .trending-main .trand-right-single .trand-right-cap span {
+	padding:4px;margin-bottom:0;margin-right:10px;
+}
+
+@media (min-width: 991px) {
+
+	.navbar-nav .nav-link {
+		padding: .5rem 2rem;
+	}
+
+}
+.navbar-nav .nav-link {
+	padding: .5rem 1rem;
+}
