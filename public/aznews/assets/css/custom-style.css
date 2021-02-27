@@ -17,6 +17,7 @@
 
 .news-source, .news-datetime {
 	text-transform: none !important;
+	color: #858585 !important
 }
 
 .navbar-nav .nav-link {
