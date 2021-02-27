@@ -12,16 +12,16 @@ Get Started.
 
 1. git clone this package
 
-2. run command to install composer package
+2. run command to install composer package <br />
     composer install
 
 3. create env file
 
-4. run command to create database table
+4. run command to create database table <br />
     php artisan migrate
 
-5. run command to generate key
+5. run command to generate key <br />
     php artisan key:generate
 
-6. run command to serve
+6. run command to serve <br />
     php artisan serve
