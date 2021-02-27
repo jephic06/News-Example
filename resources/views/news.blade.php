@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>News HTML-5 Template </title>
+    <title>News</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="site.webmanifest">
@@ -53,54 +53,11 @@
       <div class="container">
         <div class="trending-main">
 
-          <div class="col-lg-12" style="padding:30px 0">
+          <div style="padding-top:30px"></div>
 
-              <div class="trand-right-single d-flex">
-                <div class="trand-right-cap">
-                  <h4><span class="color1">热点</span><a href="details.html">Welcome To The Best Model Winner Contest</a></h4>
-                  {{-- <div class="trand-middle-img">
-                    <img src="{{ asset('aznews/assets/img/trending/right1.jpg') }}" alt="" width="32%" height="90" style="object-fit: cover;">
-                    <img src="{{ asset('aznews/assets/img/trending/right1.jpg') }}" alt="" width="32%" height="90" style="object-fit: cover;">
-                    <img src="{{ asset('aznews/assets/img/trending/right1.jpg') }}" alt="" width="32%" height="90" style="object-fit: cover;">
-                  </div> --}}
-                  <span class="news-source">123</span><span class="news-datetime">123</span>
-                </div>
-                <div class="trand-right-img" style="">
-                  <img src="{{ asset('aznews/assets/img/trending/right1.jpg') }}" alt="" width="100">
-                </div>
-              </div>
-
-              <div class="trand-right-single d-flex">
-                <div class="trand-right-cap">
-                  <span class="color2">独家</span>
-                  <h4><a href="details.html">Welcome To The Best Model Winner Contest</a></h4>
-                </div>
-                <div class="trand-right-img">
-                  <img src="{{ asset('aznews/assets/img/trending/right3.jpg') }}" alt="">
-                </div>
-              </div>
-
-              <div class="trand-right-single d-flex">
-                <div class="trand-right-cap">
-                  <span class="color3">直播</span>
-                  <h4><a href="details.html">Welcome To The Best Model Winner Contest</a></h4>
-                </div>
-                <div class="trand-right-img">
-                  <img src="{{ asset('aznews/assets/img/trending/right2.jpg') }}" alt="">
-                </div>
-              </div>
-
-              <div class="trand-right-single d-flex">
-                <div class="trand-right-cap">
-                  <span class="color4">话题</span>
-                  <h4><a href="details.html">Welcome To The Best Model Winner Contest</a></h4>
-                </div>
-                <div class="trand-right-img">
-                  <img src="{{ asset('aznews/assets/img/trending/right4.jpg') }}" alt="">
-                </div>
-              </div>
-
-          </div>
+          <div id="results"></div>
+          <input id="offset" value="0" hidden/>
+          <input id="newsCount" value="{{$newsCount}}" hidden/>
 
         </div>
       </div>
@@ -141,6 +98,74 @@
     <!-- Jquery Plugins, main Jquery -->
     <script src="{{ asset('aznews/assets/js/plugins.js') }}"></script>
     <script src="{{ asset('aznews/assets/js/main.js') }}"></script>
+
+    <script>
+    $(document).ready(function() {
+      loadResults();
+      $(window).scroll(function() {
+        var offset = parseInt($("#offset").val())
+        var newsCount = parseInt($("#newsCount").val())
+        var results = $("#results");
+        if (!results.data("loading") && offset < newsCount) {
+          if($(window).scrollTop() == $(document).height() - $(window).height()) {
+            $("#results").after($("<li class='loading' style='text-align:center;padding-bottom:50px'>Loading ...</li>").fadeIn('fast')).data("loading", true);
+            setTimeout(function(){
+              loadResults();
+            }, 1000);
+          }
+        }
+      });
+    })
+
+    function loadResults() {
+      var offset = $("#offset").val()
+
+      $.ajax({
+        url: "{{ route('load') }}",
+        type: "post",
+        data: {
+          offset: offset,
+          limit: offset == 0 ? 10 : 5,
+        },
+        success: function(data) {
+
+          var dataItem = ''
+          var results = $("#results");
+          $(".loading").fadeOut('fast', function() {
+            $(this).remove();
+          });
+
+          data.forEach((item) => {
+            dataItem += '<div class="trand-right-single d-flex">'
+            dataItem += '<div class="trand-right-cap" style='+(item.newsImages.split(',').length > 1 ? "width:100%" : "")+'>'
+            dataItem += '<h4><span class="color'+item.newsCategoryID+'">'+item.newsCategory+'</span><a href="#">'+item.newsTitle+'</a></h4>'
+
+            if(item.newsImages.split(',').length > 1) {
+              dataItem += '<div class="trand-middle-img">'
+              item.newsImages.split(',').forEach((imgItem) => {
+                dataItem += '<img src="'+imgItem+'" alt="" width="30%" style="object-fit:cover;">'
+              })
+              dataItem += '</div>'
+            }
+
+            dataItem += '<span class="news-source">'+item.newsSource+'</span><span class="news-datetime">'+item.newsDatetime+'</span>'
+            dataItem += '</div>'
+
+            dataItem += '<div class="trand-right-img">'
+            if(item.newsImages.split(',').length == 1) dataItem += '<img src="'+item.newsImages+'" alt="" width="100">'
+            dataItem += '</div>'
+
+            dataItem += '</div>'
+          })
+
+          $("#offset").val(parseInt(offset)+(offset == 0 ? 10 : 5))
+          results.append(dataItem);
+          results.removeData("loading");
+        }
+
+      });
+    };
+    </script>
 
   </body>
 </html>
